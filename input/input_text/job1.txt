@@ -1,0 +1,15 @@
+job1.txt
+Data Engineer
+Class Code: DEV123
+Salary: 70000.0 - 90000.0
+Open Date: 2024-01-15
+Close Date: 2024-12-31
+Requirements: Python, Spark
+Notes: Full-time, remote possible
+Duties: Develop ETL pipelines
+Selection: Interview
+Experience Length: 3+ years
+Job Type: Full-time
+Education Length: Bachelor
+School Type: University
+Application Location: https://company.example/careers/1

@@ -1,0 +1,36 @@
+{
+  "file_name": "job1.txt",
+  "postition": "Data Engineer",
+  "classcode": "DEV123",
+  "salary_start": 70000.0,
+  "salary_end": 90000.0,
+  "start_date": "2024-01-15",
+  "end_date": "2024-12-31",
+  "req": "Python, Spark",
+  "notes": "Full-time, remote possible",
+  "duties": "Develop ETL pipelines",
+  "selection": "Interview",
+  "experience_length": "3+ years",
+  "job_type": "Full-time",
+  "education_length": "Bachelor",
+  "school_type": "University",
+  "application_location": "https://company.example/careers/1"
+}
+{
+  "file_name": "job2.txt",
+  "postition": "ML Engineer",
+  "classcode": "ML456",
+  "salary_start": 85000.0,
+  "salary_end": 110000.0,
+  "start_date": "2024-03-01",
+  "end_date": "2024-12-31",
+  "req": "Machine Learning, Python",
+  "notes": "On-site",
+  "duties": "Build models",
+  "selection": "Coding test + interview",
+  "experience_length": "5+ years",
+  "job_type": "Full-time",
+  "education_length": "Master",
+  "school_type": "University",
+  "application_location": "https://company.example/careers/2"
+}
