@@ -125,9 +125,9 @@ if __name__ == "__main__":
         .getOrCreate()
     )
 
-    text_input_dir = "./input/input_text"
-    json_input_dir = "./input/input_json"
-    csv_input_dir = "./input/input_csv"
+    text_input_dir = "../input/input_text"
+    json_input_dir = "../input/input_json"
+    csv_input_dir = "../input/input_csv"
     pdf_input_dir = "./input/input_pdf"
     video_input_dir = "./input/input_video"
     image_input_dir = "./input/input_image"
