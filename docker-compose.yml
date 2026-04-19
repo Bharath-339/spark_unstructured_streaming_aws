@@ -1,0 +1,43 @@
+version: '3'
+
+x-spark-common: &spark-common
+  image: bitnami/spark:latest
+  volumes:
+    - ./jobs:/opt/bitnami/spark/jobs
+  command: bin/spark-class org.apache.spark.deploy.worker.Worker --host spark-worker --port 7078 --webui-port 8081 spark://spark-master:7077
+  depends_on:
+    - spark-master
+  environment:
+    SPARK_MODE: "worker"
+    SPARK_WORKER_CORES: "2"
+    SPARK_WORKER_MEMORY: "1G"
+    SPARK_MASTER: "spark://spark-master:7077"
+  ports:
+    - "7078:7078" # Spark Worker Port
+    - "9091:8081" # Spark Worker Web UI Port
+  networks:
+    - spark-network
+
+services:
+  spark-master:
+    image: bitnami/spark:latest
+    volumes:
+      - ./jobs:/opt/bitnami/spark/jobs
+    command: bin/spark-class org.apache.spark.deploy.master.Master --host spark-master --port 7077 --webui-port 8080
+    ports:
+      - "7077:7077" # Spark Master Port
+      - "9090:8080" # Spark Master Web UI Port
+    networks:
+      - spark-network
+  spark-worker-1:
+    <<: *spark-common
+  spark-worker-2:
+    <<: *spark-common
+  spark-worker-3:
+    <<: *spark-common
+  spark-worker-4:
+    <<: *spark-common
+
+networks:
+  spark-network:
+    driver: bridge
