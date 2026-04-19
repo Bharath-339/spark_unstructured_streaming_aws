@@ -1,0 +1,15 @@
+job2.txt
+ML Engineer
+Class Code: ML456
+Salary: 85000.0 - 110000.0
+Open Date: 2024-03-01
+Close Date: 2024-12-31
+Requirements: Machine Learning, Python
+Notes: On-site
+Duties: Build models
+Selection: Coding test + interview
+Experience Length: 5+ years
+Job Type: Full-time
+Education Length: Master
+School Type: University
+Application Location: https://company.example/careers/2

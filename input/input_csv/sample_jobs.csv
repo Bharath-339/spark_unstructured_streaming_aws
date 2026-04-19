@@ -1,0 +1,3 @@
+file_name,position,classcode,salary_start,salary_end,start_date,end_date,req,notes,duties,selection,experience_length,job_type,education_length,school_type,application_location
+job1.txt,Data Engineer,DEV123,70000.0,90000.0,2024-01-15,2024-12-31,"Python; Spark","Full-time, remote possible","Develop ETL pipelines",Interview,"3+ years",Full-time,Bachelor,University,https://company.example/careers/1
+job2.txt,ML Engineer,ML456,85000.0,110000.0,2024-03-01,2024-12-31,"Machine Learning; Python","On-site","Build models","Coding test + interview","5+ years",Full-time,Master,University,https://company.example/careers/2
