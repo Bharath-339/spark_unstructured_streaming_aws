@@ -49,16 +49,16 @@ Mermaid diagram (simplified):
 ```mermaid
 flowchart LR
   subgraph Inputs
-    TXT[text]\n(text files)
-    JSON(json)\n(json/jsonl)
-    CSV(csv)\n(csv files)
+    TXT[Text files]
+    JSON[JSON / JSONL]
+    CSV[CSV files]
   end
 
-  TXT --> SparkMain["Spark Driver\n(main.py)"]
+  TXT --> SparkMain["Spark Driver (main.py)"]
   JSON --> SparkMain
   CSV --> SparkMain
 
-  SparkMain -->|parse via UDFs| Parser["UDFs\n(udf_utils.py / parse_texts.py)"]
+  SparkMain -->|parse via UDFs| Parser["UDFs (udf_utils.py / parse_texts.py)"]
   Parser -->|normalized rows| LocalOut["Dev sink: output_parsed.jsonl"]
   Parser -->|write| S3Raw["S3: raw/ (production)"]
   S3Raw --> GlueCrawler["Glue Crawler & Catalog"]
