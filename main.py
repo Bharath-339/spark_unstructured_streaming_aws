@@ -36,27 +36,58 @@ def define_udf():
         ),
     }
 
+
 def format_text_df(text_df):
 
-    text_df = text_df.withColumn("file_name", regexp_replace(udfs["extract_file_name_udf"]("value"), "\r", ""))
-    text_df = text_df.withColumn("position", regexp_replace(udfs["extract_position_udf"]("value"), "\r", ""))
-    text_df = text_df.withColumn("classcode", regexp_replace(udfs["extract_classcode_udf"]("value"), "\r", ""))
-    text_df = text_df.withColumn("salary_start", udfs["extract_salary_start_udf"]("value").getItem("salary_start"))
-    text_df = text_df.withColumn("salary_end", udfs["extract_salary_start_udf"]("value").getItem("salary_end"))
+    text_df = text_df.withColumn(
+        "file_name", regexp_replace(udfs["extract_file_name_udf"]("value"), "\r", "")
+    )
+    text_df = text_df.withColumn(
+        "position", regexp_replace(udfs["extract_position_udf"]("value"), "\r", "")
+    )
+    text_df = text_df.withColumn(
+        "classcode", regexp_replace(udfs["extract_classcode_udf"]("value"), "\r", "")
+    )
+    text_df = text_df.withColumn(
+        "salary_start",
+        udfs["extract_salary_start_udf"]("value").getItem("salary_start"),
+    )
+    text_df = text_df.withColumn(
+        "salary_end", udfs["extract_salary_start_udf"]("value").getItem("salary_end")
+    )
     text_df = text_df.withColumn("start_date", udfs["extract_start_date_udf"]("value"))
     text_df = text_df.withColumn("end_date", udfs["extract_end_date_udf"]("value"))
-    text_df = text_df.withColumn("req", regexp_replace(udfs["extract_requirements_udf"]("value"), "\r", ""))
-    text_df = text_df.withColumn("notes", regexp_replace(udfs["extract_notes_udf"]("value"), "\r", ""))
-    text_df = text_df.withColumn("duties", regexp_replace(udfs["extract_duties_udf"]("value"), "\r", ""))
-    text_df = text_df.withColumn("selection", regexp_replace(udfs["extract_selection_udf"]("value"), "\r", ""))
-    text_df = text_df.withColumn("experience_length",
-                                 regexp_replace(udfs["extract_experience_length_udf"]("value"), "\r", ""))
-    text_df = text_df.withColumn("job_type", regexp_replace(udfs["extract_job_type_udf"]("value"), "\r", ""))
-    text_df = text_df.withColumn("education_length",
-                                 regexp_replace(udfs["extract_education_length_udf"]("value"), "\r", ""))
-    text_df = text_df.withColumn("school_type", regexp_replace(udfs["extract_school_type_udf"]("value"), "\r", ""))
-    text_df = text_df.withColumn("application_location",
-                                 regexp_replace(udfs["extract_application_location_udf"]("value"), "\r", ""))
+    text_df = text_df.withColumn(
+        "req", regexp_replace(udfs["extract_requirements_udf"]("value"), "\r", "")
+    )
+    text_df = text_df.withColumn(
+        "notes", regexp_replace(udfs["extract_notes_udf"]("value"), "\r", "")
+    )
+    text_df = text_df.withColumn(
+        "duties", regexp_replace(udfs["extract_duties_udf"]("value"), "\r", "")
+    )
+    text_df = text_df.withColumn(
+        "selection", regexp_replace(udfs["extract_selection_udf"]("value"), "\r", "")
+    )
+    text_df = text_df.withColumn(
+        "experience_length",
+        regexp_replace(udfs["extract_experience_length_udf"]("value"), "\r", ""),
+    )
+    text_df = text_df.withColumn(
+        "job_type", regexp_replace(udfs["extract_job_type_udf"]("value"), "\r", "")
+    )
+    text_df = text_df.withColumn(
+        "education_length",
+        regexp_replace(udfs["extract_education_length_udf"]("value"), "\r", ""),
+    )
+    text_df = text_df.withColumn(
+        "school_type",
+        regexp_replace(udfs["extract_school_type_udf"]("value"), "\r", ""),
+    )
+    text_df = text_df.withColumn(
+        "application_location",
+        regexp_replace(udfs["extract_application_location_udf"]("value"), "\r", ""),
+    )
     return text_df.select(
         "file_name",
         "position",
@@ -75,6 +106,7 @@ def format_text_df(text_df):
         "school_type",
         "application_location",
     )
+
 
 if __name__ == "__main__":
     spark = (
@@ -122,9 +154,16 @@ if __name__ == "__main__":
     )
     udfs = define_udf()
 
-    text_df = spark.readStream.format("text").option("wholetext", "true").load(text_input_dir)
+    text_df = (
+        spark.readStream.format("text").option("wholetext", "true").load(text_input_dir)
+    )
     json_df = spark.readStream.format("json").schema(schema).load(json_input_dir)
-    csv_df = spark.readStream.format("csv").option("header", "true").schema(schema).load(csv_input_dir)
+    csv_df = (
+        spark.readStream.format("csv")
+        .option("header", "true")
+        .schema(schema)
+        .load(csv_input_dir)
+    )
 
     # Apply UDFs to the text DataFrame to extract structured fields
     text_df = format_text_df(text_df)
@@ -132,16 +171,16 @@ if __name__ == "__main__":
     final_df = text_df.unionByName(json_df).unionByName(csv_df)
 
     def streamWriter(df, output_dir):
-        return (df.writeStream
-                    .format("parquet")
-                    .trigger("processingTime", "2 minute")
-                    .option("checkpointLocation", f'{output_dir}/checkpoint')
-                    .outputMode("append")
-                    .start(f'{output_dir}/data')
-                )
+        return (
+            df.writeStream.format("parquet")
+            .trigger("processingTime", "2 minute")
+            .option("checkpointLocation", f"{output_dir}/checkpoint")
+            .outputMode("append")
+            .start(f"{output_dir}/data")
+        )
 
     s3_bucket_name = configuration.get("S3_BUCKET_NAME")
-    s3_dir = f's3a://{s3_bucket_name}/unstructured_streaming/'
+    s3_dir = f"s3a://{s3_bucket_name}/unstructured_streaming/"
 
-    query = streamWriter(final_df,s3_dir)
+    query = streamWriter(final_df, s3_dir)
     query.awaitTermination()
